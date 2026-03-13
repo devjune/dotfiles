@@ -17,6 +17,12 @@ TERMINAL_TARGETS := \
 # Languages
 LANGUAGES := java:temurin-25 nodejs:latest python:latest
 
+# Zsh plugins (repo_url:plugin_name)
+ZSH_PLUGINS := \
+	https://github.com/zsh-users/zsh-autosuggestions \
+	https://github.com/zsh-users/zsh-syntax-highlighting \
+	https://github.com/Aloxaf/fzf-tab
+
 # ===== Utility Functions =====
 define PRINT_HEADER
 	@echo "🔵 ==> $(1)"
@@ -145,6 +151,14 @@ omz:
 	else \
 		echo "Oh My Zsh already installed"; \
 	fi
+	@for repo in $(ZSH_PLUGINS); do \
+		plugin=$$(basename $$repo); \
+		if [ ! -d ~/.oh-my-zsh/custom/plugins/$$plugin ]; then \
+			git clone $$repo ~/.oh-my-zsh/custom/plugins/$$plugin; \
+		else \
+			echo "$$plugin already installed"; \
+		fi; \
+	done
 	$(call PRINT_SUCCESS,Oh My Zsh ready)
 
 brew-check:
