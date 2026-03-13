@@ -39,7 +39,7 @@ define BACKUP_AND_LINK
 endef
 
 # ===== Main Targets =====
-.PHONY: all install terminal clean help check-system homebrew tools omz languages brew-dump brew-check
+.PHONY: all install terminal clean help check check-system homebrew tools omz languages brew-dump brew-check
 .DEFAULT_GOAL := help
 
 all: check-system install terminal
@@ -76,10 +76,36 @@ help:
 	@echo "  install    - Homebrew + tools + Oh My Zsh"
 	@echo "  terminal   - Link terminal configs (Ghostty, Starship, zshrc)"
 	@echo "  languages  - Install programming languages via asdf"
+	@echo "  check      - Verify symlinks and dependencies"
 	@echo "  brew-check - Check Brewfile sync status"
 	@echo "  brew-dump  - Update Brewfile from current system"
 	@echo "  clean      - Remove all installed components and restore backups"
 	@echo "  help       - Show this help message"
+
+check:
+	$(call PRINT_HEADER,Environment Check)
+	@ok=true; \
+	for f in $(TERMINAL_TARGETS); do \
+		if [ -L "$$f" ]; then \
+			target=$$(readlink "$$f"); \
+			if [ -e "$$target" ]; then \
+				echo "✅ $$f → $$target"; \
+			else \
+				echo "❌ $$f → $$target (broken)"; ok=false; \
+			fi; \
+		elif [ -e "$$f" ]; then \
+			echo "⚠️  $$f (not a symlink)"; ok=false; \
+		else \
+			echo "❌ $$f (missing)"; ok=false; \
+		fi; \
+	done; \
+	if [ -d ~/.oh-my-zsh ]; then echo "✅ oh-my-zsh"; else echo "❌ oh-my-zsh (missing)"; ok=false; fi; \
+	if command -v brew >/dev/null 2>&1; then echo "✅ homebrew"; else echo "❌ homebrew (missing)"; ok=false; fi; \
+	if [ "$$ok" = "true" ]; then \
+		echo ""; echo "✅ All good"; \
+	else \
+		echo ""; echo "⚠️  Issues found. Run 'make all' to fix"; \
+	fi
 
 # ===== Sub Targets =====
 check-system:
