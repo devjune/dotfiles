@@ -11,7 +11,8 @@ TERMINAL_TARGETS := \
 	$(HOME)/.config/ghostty/config \
 	$(HOME)/.config/starship.toml \
 	$(HOME)/.zshrc \
-	$(HOME)/.tmux.conf
+	$(HOME)/.tmux.conf \
+	$(HOME)/.gitconfig
 
 # Languages
 LANGUAGES := java:temurin-21 nodejs:latest python:latest
@@ -54,6 +55,8 @@ terminal:
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/starship/starship.toml,$(HOME)/.config/starship.toml)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/zsh/zshrc,$(HOME)/.zshrc)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/tmux/tmux.conf,$(HOME)/.tmux.conf)
+	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/git/gitconfig,$(HOME)/.gitconfig)
+	@if [ ! -f $(HOME)/.gitconfig.local ]; then cp $(DOTFILES_DIR)/git/gitconfig.local.example $(HOME)/.gitconfig.local; echo "📝 Created ~/.gitconfig.local — edit with your name/email"; fi
 	@touch ~/.hushlogin
 	$(call PRINT_SUCCESS,Terminal configs linked)
 

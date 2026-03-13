@@ -1,1 +1,25 @@
 add_newline = false
+command_timeout = 500
+scan_timeout = 10
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$kotlin\
+$nodejs\
+$character"""
+
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+
+[git_branch]
+format = "[$branch]($style) "
+
+[git_status]
+format = '([$all_status$ahead_behind]($style) )'
+
+[character]
+success_symbol = "[➜](bold green)"
+error_symbol = "[➜](bold red)"
