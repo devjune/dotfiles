@@ -156,13 +156,21 @@ asdf-setup:
 	fi
 	@echo "✅ asdf configured."
 
+define BACKUP_AND_LINK
+	@if [ -e $(2) ] && [ ! -L $(2) ]; then \
+		cp $(2) $(2).bak.$$(date +%Y%m%d); \
+		echo "📦 Backed up $(2)"; \
+	fi
+	@ln -sf $(1) $(2)
+	@echo "🔗 $(2) → $(1)"
+endef
+
 terminal: tools
 	$(call PRINT_HEADER,Terminal Configuration)
 	@mkdir -p ~/.config/ghostty
-	@mkdir -p ~/.config
-	@ln -sf $(DOTFILES_DIR)/ghostty/config ~/.config/ghostty/config
-	@ln -sf $(DOTFILES_DIR)/starship/starship.toml ~/.config/starship.toml
-	@ln -sf $(DOTFILES_DIR)/zshrc ~/.zshrc
+	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/ghostty/config,$(HOME)/.config/ghostty/config)
+	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/starship/starship.toml,$(HOME)/.config/starship.toml)
+	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/zshrc,$(HOME)/.zshrc)
 	@touch ~/.hushlogin
 	$(call PRINT_SUCCESS,Terminal configs linked)
 
