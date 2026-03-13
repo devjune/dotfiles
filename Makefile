@@ -9,8 +9,14 @@ OH_MY_ZSH_PATH := $(HOME_DIR)/.oh-my-zsh
 ZSH_CUSTOM := $(OH_MY_ZSH_PATH)/custom
 DOTFILES_DIR := $(shell pwd)
 
+# Terminal config link targets
+TERMINAL_LINKS := \
+	$(HOME)/.config/ghostty/config \
+	$(HOME)/.config/starship.toml \
+	$(HOME)/.zshrc
+
 # Languages
-LANGUAGES := java:temurin-21.0.7+6.0.LTS nodejs:latest python:latest
+LANGUAGES := java:temurin-21 nodejs:latest python:latest
 
 # ===== Utility Functions =====
 define PRINT_HEADER
