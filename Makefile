@@ -104,6 +104,7 @@ check:
 	done; \
 	if [ -d ~/.oh-my-zsh ]; then echo "✅ oh-my-zsh"; else echo "❌ oh-my-zsh (missing)"; ok=false; fi; \
 	if command -v brew >/dev/null 2>&1; then echo "✅ homebrew"; else echo "❌ homebrew (missing)"; ok=false; fi; \
+	if command -v mise >/dev/null 2>&1; then echo "✅ mise"; else echo "❌ mise (missing)"; ok=false; fi; \
 	if [ "$$ok" = "true" ]; then \
 		echo ""; echo "✅ All good"; \
 	else \
