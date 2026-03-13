@@ -18,7 +18,6 @@ brew "mise"
 brew "git"
 brew "gh"
 brew "go"
-brew "node"
 brew "jq"
 
 # --- Utilities ---
