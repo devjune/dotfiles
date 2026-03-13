@@ -10,12 +10,16 @@ DOTFILES_DIR := $(shell pwd)
 TERMINAL_TARGETS := \
 	$(HOME)/.config/ghostty/config \
 	$(HOME)/.config/starship.toml \
+	$(HOME)/.config/eza/theme.yml \
 	$(HOME)/.zshrc \
 	$(HOME)/.tmux.conf \
 	$(HOME)/.gitconfig
 
 # Languages
 LANGUAGES := java:temurin-25 nodejs:latest python:latest
+
+# Eza theme
+EZA_THEME := one_dark
 
 # Zsh plugins (repo_url:plugin_name)
 ZSH_PLUGINS := \
@@ -30,10 +34,6 @@ endef
 
 define PRINT_SUCCESS
 	@echo "✅ $(1)"
-endef
-
-define PRINT_ERROR
-	@echo "❌ $(1)"
 endef
 
 define BACKUP_AND_LINK
@@ -58,6 +58,13 @@ terminal:
 	$(call PRINT_HEADER,Terminal Configuration)
 	@mkdir -p ~/.config/ghostty
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/ghostty/config,$(HOME)/.config/ghostty/config)
+	@mkdir -p $(HOME)/.config/eza
+	@if [ ! -d $(HOME)/.config/eza/eza-themes ]; then \
+		git clone https://github.com/eza-community/eza-themes.git $(HOME)/.config/eza/eza-themes; \
+	else \
+		echo "eza-themes already cloned"; \
+	fi
+	$(call BACKUP_AND_LINK,$(HOME)/.config/eza/eza-themes/themes/$(EZA_THEME).yml,$(HOME)/.config/eza/theme.yml)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/starship/starship.toml,$(HOME)/.config/starship.toml)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/zsh/zshrc,$(HOME)/.zshrc)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/tmux/tmux.conf,$(HOME)/.tmux.conf)
@@ -67,8 +74,9 @@ terminal:
 	$(call PRINT_SUCCESS,Terminal configs linked)
 
 clean:
-	@echo "🧹 Cleaning up all installed components..."
+	$(call PRINT_HEADER,Cleaning up all installed components)
 	@rm -rf ~/.oh-my-zsh
+	@rm -rf ~/.config/eza
 	@rm -rf ~/.local/share/mise
 	@rm -rf ~/.config/mise
 	@rm -f ~/.hushlogin
@@ -77,13 +85,13 @@ clean:
 		latest=$$(ls -t "$$f".bak.* 2>/dev/null | head -n1); \
 		if [ -n "$$latest" ]; then mv "$$latest" "$$f"; echo "📦 Restored $$f from $$latest"; fi; \
 	done
-	@echo "✅ Cleanup completed"
+	$(call PRINT_SUCCESS,Cleanup completed)
 
 help:
 	@echo "Available targets:"
 	@echo "  all        - Install everything"
 	@echo "  install    - Homebrew + tools + Oh My Zsh"
-	@echo "  terminal   - Link terminal configs (Ghostty, Starship, zshrc)"
+	@echo "  terminal   - Link terminal configs (Ghostty, Starship, eza, zshrc, tmux, git)"
 	@echo "  languages  - Install programming languages via mise"
 	@echo "  check      - Verify symlinks and dependencies"
 	@echo "  brew-check - Check Brewfile sync status"
@@ -122,10 +130,10 @@ check-system:
 	$(call PRINT_HEADER,System Compatibility Check)
 	@echo "OS: $$(uname -s) / Arch: $$(uname -m)"
 	@if [ "$(IS_MACOS)" != "true" ]; then \
-		$(call PRINT_ERROR,This setup requires macOS); exit 1; \
+		echo "❌ This setup requires macOS"; exit 1; \
 	fi
 	@if [ "$(IS_ARM64)" != "true" ]; then \
-		$(call PRINT_ERROR,This setup requires Apple Silicon); exit 1; \
+		echo "❌ This setup requires Apple Silicon"; exit 1; \
 	fi
 	$(call PRINT_SUCCESS,System compatibility verified)
 
@@ -192,7 +200,7 @@ brew-dump:
 languages:
 	$(call PRINT_HEADER,Installing programming languages)
 	@if ! command -v mise >/dev/null 2>&1; then \
-		echo "❌ mise not installed. Run 'make install' first"; exit 1; \
+		echo "❌ mise not installed. Run 'make install' first."; exit 1; \
 	fi; \
 	for lang_ver in $(LANGUAGES); do \
 		lang=$${lang_ver%%:*}; \

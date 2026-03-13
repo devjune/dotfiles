@@ -1,7 +1,9 @@
+# --- General ---
 add_newline = false
 command_timeout = 500
 scan_timeout = 10
 
+# --- Prompt Format ---
 format = """
 $directory\
 $git_branch\
@@ -10,6 +12,7 @@ $kotlin\
 $nodejs\
 $character"""
 
+# --- Modules ---
 [directory]
 truncation_length = 3
 truncate_to_repo = true
