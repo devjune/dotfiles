@@ -1,9 +1,12 @@
+# --- Identity ---
 [include]
     path = ~/.gitconfig.local
 
+# --- Core ---
 [core]
     pager = delta
 
+# --- Delta ---
 [interactive]
     diffFilter = delta --color-only
 
