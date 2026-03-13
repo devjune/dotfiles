@@ -1,4 +1,6 @@
 brew "asdf"
+brew "bat"
+brew "eza"
 brew "curl"
 brew "fzf"
 brew "gh"

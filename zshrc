@@ -104,6 +104,11 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 export PATH="$HOME/.local/bin:$PATH"
 
+# aliases
+alias ll="eza -l --git"
+alias la="eza -la --git"
+alias lt="eza --tree --level=2"
+
 # zoxide
 eval "$(zoxide init zsh)"
 
