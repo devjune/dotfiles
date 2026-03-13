@@ -4,15 +4,13 @@ IS_ARM64 := $(shell [ "$$(uname -m)" = "arm64" ] && echo "true")
 
 # Paths
 BREW_PATH := /opt/homebrew/bin/brew
-ASDF_PATH := $(shell $(BREW_PATH) --prefix asdf)/libexec/asdf.sh
 HOME_DIR := $(HOME)
 OH_MY_ZSH_PATH := $(HOME_DIR)/.oh-my-zsh
 ZSH_CUSTOM := $(OH_MY_ZSH_PATH)/custom
 DOTFILES_DIR := $(shell pwd)
 
-
 # Languages
-LANGUAGES := java:temurin-21.0.7+6.0.LTS nodejs:latest:24 python:latest:3
+LANGUAGES := java:temurin-21.0.7+6.0.LTS nodejs:latest python:latest
 
 # ===== Utility Functions =====
 define PRINT_HEADER
@@ -40,7 +38,7 @@ endef
 .PHONY: all install terminal clean help check-system homebrew tools omz languages dump check
 .DEFAULT_GOAL := help
 
-all: check-system install terminal languages
+all: check-system install terminal
 	$(call PRINT_SUCCESS,Complete development environment ready!)
 
 install: homebrew tools omz
@@ -112,12 +110,6 @@ omz:
 	else \
 		echo "Oh My Zsh already installed"; \
 	fi
-	@if [ ! -d "$(ZSH_CUSTOM)/plugins/zsh-autosuggestions" ]; then \
-		git clone https://github.com/zsh-users/zsh-autosuggestions $(ZSH_CUSTOM)/plugins/zsh-autosuggestions; \
-	fi
-	@if [ ! -d "$(ZSH_CUSTOM)/plugins/zsh-syntax-highlighting" ]; then \
-		git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $(ZSH_CUSTOM)/plugins/zsh-syntax-highlighting; \
-	fi
 	$(call PRINT_SUCCESS,Oh My Zsh ready)
 
 check:
@@ -145,15 +137,19 @@ dump:
 	@$(BREW_PATH) bundle dump --file=$(DOTFILES_DIR)/Brewfile --force
 	$(call PRINT_SUCCESS,Brewfile updated)
 
-languages: install
+languages:
 	$(call PRINT_HEADER,Installing programming languages)
-	@. "$(ASDF_PATH)" && \
+	@asdf_path=$$($(BREW_PATH) --prefix asdf)/libexec/asdf.sh; \
+	if [ ! -f "$$asdf_path" ]; then \
+		echo "❌ asdf not installed. Run 'make install' first"; exit 1; \
+	fi; \
+	. "$$asdf_path" && \
 	for lang_ver in $(LANGUAGES); do \
-		lang=$${lang_ver%%:*} && \
-		version=$${lang_ver#*:} && \
-		echo "Adding $$lang plugin..." && \
-		asdf plugin add $$lang && \
-		asdf install $$lang $$version && \
+		lang=$${lang_ver%%:*}; \
+		version=$${lang_ver#*:}; \
+		echo "Adding $$lang plugin..."; \
+		asdf plugin add $$lang 2>/dev/null || true; \
+		asdf install $$lang $$version; \
 		asdf set $$lang $$version; \
 	done && \
 	echo "Installed versions:" && \
