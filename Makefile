@@ -51,7 +51,7 @@ terminal:
 	@mkdir -p ~/.config/ghostty
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/ghostty/config,$(HOME)/.config/ghostty/config)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/starship/starship.toml,$(HOME)/.config/starship.toml)
-	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/zshrc,$(HOME)/.zshrc)
+	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/zsh/zshrc,$(HOME)/.zshrc)
 	@touch ~/.hushlogin
 	$(call PRINT_SUCCESS,Terminal configs linked)
 
