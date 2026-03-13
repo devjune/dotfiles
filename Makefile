@@ -6,7 +6,7 @@ IS_ARM64 := $(shell [ "$$(uname -m)" = "arm64" ] && echo "true")
 BREW_PATH := /opt/homebrew/bin/brew
 DOTFILES_DIR := $(shell pwd)
 
-# Terminal config targets (clean 타겟에서도 참조)
+# Terminal config targets (also referenced in clean target)
 TERMINAL_TARGETS := \
 	$(HOME)/.config/ghostty/config \
 	$(HOME)/.config/starship.toml \
@@ -153,21 +153,21 @@ brew-check:
 	missing=$$($(BREW_PATH) bundle check --file=$(DOTFILES_DIR)/Brewfile 2>&1 || true); \
 	synced=true; \
 	if [ -n "$$untracked" ]; then \
-		echo "⚠️  Brewfile에 없는 패키지:"; \
+		echo "⚠️  Packages not in Brewfile:"; \
 		echo "$$untracked"; \
 		echo ""; \
-		echo "→ make brew-dump 으로 Brewfile 업데이트 필요"; \
+		echo "→ Run 'make brew-dump' to update Brewfile"; \
 		synced=false; \
 	fi; \
 	if echo "$$missing" | grep -q "needs to be installed"; then \
-		echo "⚠️  설치 안 된 패키지:"; \
+		echo "⚠️  Packages not installed:"; \
 		echo "$$missing"; \
 		echo ""; \
-		echo "→ make tools 로 설치 필요"; \
+		echo "→ Run 'make tools' to install"; \
 		synced=false; \
 	fi; \
 	if [ "$$synced" = "true" ]; then \
-		echo "✅ Brewfile과 시스템이 동기화 상태"; \
+		echo "✅ Brewfile and system are in sync"; \
 	fi
 
 brew-dump:
@@ -183,7 +183,7 @@ languages:
 	for lang_ver in $(LANGUAGES); do \
 		lang=$${lang_ver%%:*}; \
 		version=$${lang_ver#*:}; \
-		echo "Installing $$lang@$$version..."; \
+		echo "📦 Installing $$lang@$$version..."; \
 		mise use -g $$lang@$$version; \
 	done && \
 	echo "Installed versions:" && \
