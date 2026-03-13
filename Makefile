@@ -15,7 +15,7 @@ TERMINAL_TARGETS := \
 	$(HOME)/.gitconfig
 
 # Languages
-LANGUAGES := java:temurin-21 nodejs:latest python:latest
+LANGUAGES := java:temurin-25 nodejs:latest python:latest
 
 # ===== Utility Functions =====
 define PRINT_HEADER
@@ -63,8 +63,8 @@ terminal:
 clean:
 	@echo "🧹 Cleaning up all installed components..."
 	@rm -rf ~/.oh-my-zsh
-	@rm -rf ~/.asdf
-	@rm -f ~/.tool-versions
+	@rm -rf ~/.local/share/mise
+	@rm -rf ~/.config/mise
 	@rm -f ~/.hushlogin
 	@for f in $(TERMINAL_TARGETS); do \
 		if [ -L "$$f" ]; then rm "$$f"; echo "🔗 Removed symlink $$f"; fi; \
@@ -78,7 +78,7 @@ help:
 	@echo "  all        - Install everything"
 	@echo "  install    - Homebrew + tools + Oh My Zsh"
 	@echo "  terminal   - Link terminal configs (Ghostty, Starship, zshrc)"
-	@echo "  languages  - Install programming languages via asdf"
+	@echo "  languages  - Install programming languages via mise"
 	@echo "  check      - Verify symlinks and dependencies"
 	@echo "  brew-check - Check Brewfile sync status"
 	@echo "  brew-dump  - Update Brewfile from current system"
@@ -176,19 +176,15 @@ brew-dump:
 
 languages:
 	$(call PRINT_HEADER,Installing programming languages)
-	@asdf_path=$$($(BREW_PATH) --prefix asdf)/libexec/asdf.sh; \
-	if [ ! -f "$$asdf_path" ]; then \
-		echo "❌ asdf not installed. Run 'make install' first"; exit 1; \
+	@if ! command -v mise >/dev/null 2>&1; then \
+		echo "❌ mise not installed. Run 'make install' first"; exit 1; \
 	fi; \
-	. "$$asdf_path" && \
 	for lang_ver in $(LANGUAGES); do \
 		lang=$${lang_ver%%:*}; \
 		version=$${lang_ver#*:}; \
-		echo "Adding $$lang plugin..."; \
-		asdf plugin add $$lang 2>/dev/null || true; \
-		asdf install $$lang $$version; \
-		asdf set $$lang $$version; \
+		echo "Installing $$lang@$$version..."; \
+		mise use -g $$lang@$$version; \
 	done && \
 	echo "Installed versions:" && \
-	asdf list
+	mise ls
 	$(call PRINT_SUCCESS,All programming languages installed)
