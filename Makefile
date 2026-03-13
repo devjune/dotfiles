@@ -10,7 +10,8 @@ DOTFILES_DIR := $(shell pwd)
 TERMINAL_TARGETS := \
 	$(HOME)/.config/ghostty/config \
 	$(HOME)/.config/starship.toml \
-	$(HOME)/.zshrc
+	$(HOME)/.zshrc \
+	$(HOME)/.tmux.conf
 
 # Languages
 LANGUAGES := java:temurin-21 nodejs:latest python:latest
@@ -52,6 +53,7 @@ terminal:
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/ghostty/config,$(HOME)/.config/ghostty/config)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/starship/starship.toml,$(HOME)/.config/starship.toml)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/zsh/zshrc,$(HOME)/.zshrc)
+	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/tmux/tmux.conf,$(HOME)/.tmux.conf)
 	@touch ~/.hushlogin
 	$(call PRINT_SUCCESS,Terminal configs linked)
 
