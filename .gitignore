@@ -1,3 +1,4 @@
 .idea
 .mise.toml
 git/gitconfig.local
+.claude/settings.local.json
