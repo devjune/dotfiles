@@ -10,9 +10,6 @@ OH_MY_ZSH_PATH := $(HOME_DIR)/.oh-my-zsh
 ZSH_CUSTOM := $(OH_MY_ZSH_PATH)/custom
 DOTFILES_DIR := $(shell pwd)
 
-# Tools & Plugins
-BREW_TOOLS := asdf git curl zsh tree wget jq fzf starship
-BREW_CASKS := font-jetbrains-mono-nerd-font
 
 # Languages
 LANGUAGES := java:temurin-21.0.7+6.0.LTS nodejs:latest:24 python:latest:3
@@ -40,7 +37,7 @@ define BACKUP_AND_LINK
 endef
 
 # ===== Main Targets =====
-.PHONY: all install terminal clean help check-system homebrew tools omz languages
+.PHONY: all install terminal clean help check-system homebrew tools omz languages dump
 .DEFAULT_GOAL := help
 
 all: check-system install terminal languages
@@ -76,6 +73,7 @@ help:
 	@echo "  install    - Homebrew + tools + Oh My Zsh"
 	@echo "  terminal   - Link terminal configs (Ghostty, Starship, zshrc)"
 	@echo "  languages  - Install programming languages via asdf"
+	@echo "  dump       - Update Brewfile from current system"
 	@echo "  clean      - Remove all installed components and restore backups"
 	@echo "  help       - Show this help message"
 
@@ -103,10 +101,7 @@ homebrew:
 
 tools: homebrew
 	$(call PRINT_HEADER,Development Tools Installation)
-	@$(BREW_PATH) install $(BREW_TOOLS) || { \
-		$(call PRINT_ERROR,Failed to install development tools); exit 1; \
-	}
-	@$(BREW_PATH) install --cask $(BREW_CASKS) || true
+	@$(BREW_PATH) bundle --file=$(DOTFILES_DIR)/Brewfile
 	$(call PRINT_SUCCESS,Development tools installed)
 
 omz:
@@ -123,6 +118,11 @@ omz:
 		git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $(ZSH_CUSTOM)/plugins/zsh-syntax-highlighting; \
 	fi
 	$(call PRINT_SUCCESS,Oh My Zsh ready)
+
+dump:
+	$(call PRINT_HEADER,Updating Brewfile)
+	@$(BREW_PATH) bundle dump --file=$(DOTFILES_DIR)/Brewfile --force
+	$(call PRINT_SUCCESS,Brewfile updated)
 
 languages: install
 	$(call PRINT_HEADER,Installing programming languages)
