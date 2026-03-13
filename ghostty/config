@@ -7,6 +7,8 @@
 # --- Typography ---
 font-family = JetBrainsMonoNerdFont
 font-size = 15
+adjust-cell-width = -1
+font-thicken = true
 font-codepoint-map = U+AC00-U+D7AF=D2Coding
 font-codepoint-map = U+1100-U+11FF=D2Coding
 font-codepoint-map = U+3130-U+318F=D2Coding
@@ -16,9 +18,16 @@ macos-titlebar-style = transparent
 window-padding-x = 10
 window-padding-y = 8
 window-save-state = always
+window-padding-balance = true
+window-padding-color = extend
+
+# --- Mouse ---
+mouse-hide-while-typing = true
 
 # --- Cursor ---
+cursor-style = underline
 cursor-opacity = 0.8
+shell-integration-features = no-cursor  # prevent shell from overriding cursor-style
 
 # --- Keybindings ---
 keybind = alt+left=text:\x1bb
