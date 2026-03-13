@@ -1,11 +1,12 @@
 # Dotfiles
 
-My development environment configuration.
+macOS (Apple Silicon) development environment setup.
 
-## Quick Start
+## Setup
 
 ```bash
-git clone https://github.com/devjune/dotfiles.git ~/yourpath
-cd ~/yourpath
-make help
+git clone git@github.com:devjune/dotfiles.git ~/git/dotfiles
+cd ~/git/dotfiles
+make all        # Homebrew + tools + terminal configs
+make languages  # Programming languages (optional)
 ```
