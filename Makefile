@@ -37,7 +37,7 @@ define BACKUP_AND_LINK
 endef
 
 # ===== Main Targets =====
-.PHONY: all install terminal clean help check-system homebrew tools omz languages dump
+.PHONY: all install terminal clean help check-system homebrew tools omz languages dump check
 .DEFAULT_GOAL := help
 
 all: check-system install terminal languages
@@ -73,6 +73,7 @@ help:
 	@echo "  install    - Homebrew + tools + Oh My Zsh"
 	@echo "  terminal   - Link terminal configs (Ghostty, Starship, zshrc)"
 	@echo "  languages  - Install programming languages via asdf"
+	@echo "  check      - Check Brewfile sync status"
 	@echo "  dump       - Update Brewfile from current system"
 	@echo "  clean      - Remove all installed components and restore backups"
 	@echo "  help       - Show this help message"
@@ -118,6 +119,26 @@ omz:
 		git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $(ZSH_CUSTOM)/plugins/zsh-syntax-highlighting; \
 	fi
 	$(call PRINT_SUCCESS,Oh My Zsh ready)
+
+check:
+	$(call PRINT_HEADER,Brew Sync Check)
+	@untracked=$$($(BREW_PATH) bundle cleanup --file=$(DOTFILES_DIR)/Brewfile 2>/dev/null); \
+	missing=$$($(BREW_PATH) bundle check --file=$(DOTFILES_DIR)/Brewfile 2>&1 || true); \
+	if [ -n "$$untracked" ]; then \
+		echo "⚠️  Brewfile에 없는 패키지:"; \
+		echo "$$untracked"; \
+		echo ""; \
+		echo "→ make dump 으로 Brewfile 업데이트 필요"; \
+	fi; \
+	if echo "$$missing" | grep -q "needs to be installed"; then \
+		echo "⚠️  설치 안 된 패키지:"; \
+		echo "$$missing"; \
+		echo ""; \
+		echo "→ make tools 로 설치 필요"; \
+	fi; \
+	if [ -z "$$untracked" ] && ! echo "$$missing" | grep -q "needs to be installed"; then \
+		echo "✅ Brewfile과 시스템이 동기화 상태"; \
+	fi
 
 dump:
 	$(call PRINT_HEADER,Updating Brewfile)
