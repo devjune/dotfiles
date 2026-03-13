@@ -30,6 +30,7 @@ brew "terminal-notifier"
 brew "tree"
 
 # --- Casks ---
+cask "font-d2coding-nerd-font"
 cask "font-jetbrains-mono-nerd-font"
 cask "ngrok"
 cask "warp"
