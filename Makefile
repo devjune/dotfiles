@@ -8,9 +8,11 @@ ASDF_PATH := $(shell $(BREW_PATH) --prefix asdf)/libexec/asdf.sh
 HOME_DIR := $(HOME)
 OH_MY_ZSH_PATH := $(HOME_DIR)/.oh-my-zsh
 ZSH_CUSTOM := $(OH_MY_ZSH_PATH)/custom
+DOTFILES_DIR := $(shell pwd)
 
 # Tools & Plugins
-BREW_TOOLS := asdf git curl zsh tree wget jq
+BREW_TOOLS := asdf git curl zsh tree wget jq fzf starship
+BREW_CASKS := font-jetbrains-mono-nerd-font
 OMZ_PLUGINS := git z sudo copypath copyfile extract docker docker-compose npm node python brew zsh-autosuggestions zsh-syntax-highlighting
 
 # Languages
@@ -64,10 +66,10 @@ define ENABLE_PLUGINS
 endef
 
 # ===== Main Targets =====
-.PHONY: all install clean help
+.PHONY: all install terminal clean help
 .DEFAULT_GOAL := help
 
-all: check-system install languages
+all: check-system install terminal languages
 	$(call PRINT_SUCCESS,Complete development environment ready!)
 
 install: homebrew tools asdf-setup
@@ -104,6 +106,7 @@ help:
 	@echo "  tools      - Install base tools"
 	@echo "  asdf-setup - Setup asdf version manager"
 	@echo "  install    - Install all components"
+	@echo "  terminal   - Link terminal configs (Ghostty, Starship, zshrc)"
 	@echo "  clean      - Remove all installed components"
 	@echo "  help       - Show this help message"
 	@echo ""
@@ -142,6 +145,7 @@ tools: homebrew
 	@$(BREW_PATH) install $(BREW_TOOLS) || { \
 		$(call PRINT_ERROR,Failed to install development tools); exit 1; \
 	}
+	@$(BREW_PATH) install --cask $(BREW_CASKS) || true
 	$(call PRINT_SUCCESS,Development tools installed)
 
 asdf-setup:
@@ -151,6 +155,16 @@ asdf-setup:
 		echo '. "$(ASDF_PATH)"' >> ~/.zshrc; \
 	fi
 	@echo "✅ asdf configured."
+
+terminal: tools
+	$(call PRINT_HEADER,Terminal Configuration)
+	@mkdir -p ~/.config/ghostty
+	@mkdir -p ~/.config
+	@ln -sf $(DOTFILES_DIR)/ghostty/config ~/.config/ghostty/config
+	@ln -sf $(DOTFILES_DIR)/starship/starship.toml ~/.config/starship.toml
+	@ln -sf $(DOTFILES_DIR)/zshrc ~/.zshrc
+	@touch ~/.hushlogin
+	$(call PRINT_SUCCESS,Terminal configs linked)
 
 languages: install
 	$(call PRINT_HEADER,Installing programming languages)
