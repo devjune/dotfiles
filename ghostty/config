@@ -1,0 +1,35 @@
+# ============================================
+# Ghostty Terminal Config
+# ============================================
+# File: ~/.config/ghostty/config
+# Reload: Cmd+Shift+, (macOS)
+
+# --- Typography ---
+font-family = JetBrainsMonoNerdFont
+font-size = 15
+adjust-cell-height = 1
+
+# --- Window and Appearance ---
+background-opacity = 0.9
+background-blur-radius = 20
+macos-titlebar-style = transparent
+window-padding-x = 10
+window-padding-y = 8
+window-save-state = always
+window-theme = auto
+
+# --- Cursor ---
+cursor-style-blink = true
+cursor-opacity = 0.8
+
+# --- Keybindings ---
+keybind = alt+left=text:\x1bb
+keybind = alt+right=text:\x1bf
+keybind = alt+backspace=text:\x17
+keybind = alt+delete=text:\x1b[3;3~
+
+# --- Mouse ---
+copy-on-select = clipboard
+
+# --- Clipboard ---
+clipboard-trim-trailing-spaces = true
