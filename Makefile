@@ -4,13 +4,10 @@ IS_ARM64 := $(shell [ "$$(uname -m)" = "arm64" ] && echo "true")
 
 # Paths
 BREW_PATH := /opt/homebrew/bin/brew
-HOME_DIR := $(HOME)
-OH_MY_ZSH_PATH := $(HOME_DIR)/.oh-my-zsh
-ZSH_CUSTOM := $(OH_MY_ZSH_PATH)/custom
 DOTFILES_DIR := $(shell pwd)
 
-# Terminal config link targets
-TERMINAL_LINKS := \
+# Terminal config targets (clean 타겟에서도 참조)
+TERMINAL_TARGETS := \
 	$(HOME)/.config/ghostty/config \
 	$(HOME)/.config/starship.toml \
 	$(HOME)/.zshrc
@@ -32,11 +29,11 @@ define PRINT_ERROR
 endef
 
 define BACKUP_AND_LINK
-	@if [ -e $(2) ] && [ ! -L $(2) ]; then \
-		cp $(2) $(2).bak.$$(date +%Y%m%d); \
+	@if [ -e "$(2)" ] && [ ! -L "$(2)" ]; then \
+		cp "$(2)" "$(2).bak.$$(date +%Y%m%d_%H%M%S)"; \
 		echo "📦 Backed up $(2)"; \
 	fi
-	@ln -sf $(1) $(2)
+	@ln -sf "$(1)" "$(2)"
 	@echo "🔗 $(2) → $(1)"
 endef
 
@@ -64,7 +61,7 @@ clean:
 	@rm -rf ~/.asdf
 	@rm -f ~/.tool-versions
 	@rm -f ~/.hushlogin
-	@for f in ~/.zshrc ~/.config/ghostty/config ~/.config/starship.toml; do \
+	@for f in $(TERMINAL_TARGETS); do \
 		if [ -L "$$f" ]; then rm "$$f"; echo "🔗 Removed symlink $$f"; fi; \
 		latest=$$(ls -t "$$f".bak.* 2>/dev/null | head -n1); \
 		if [ -n "$$latest" ]; then mv "$$latest" "$$f"; echo "📦 Restored $$f from $$latest"; fi; \
@@ -122,19 +119,22 @@ check:
 	$(call PRINT_HEADER,Brew Sync Check)
 	@untracked=$$($(BREW_PATH) bundle cleanup --file=$(DOTFILES_DIR)/Brewfile 2>/dev/null); \
 	missing=$$($(BREW_PATH) bundle check --file=$(DOTFILES_DIR)/Brewfile 2>&1 || true); \
+	synced=true; \
 	if [ -n "$$untracked" ]; then \
 		echo "⚠️  Brewfile에 없는 패키지:"; \
 		echo "$$untracked"; \
 		echo ""; \
 		echo "→ make dump 으로 Brewfile 업데이트 필요"; \
+		synced=false; \
 	fi; \
 	if echo "$$missing" | grep -q "needs to be installed"; then \
 		echo "⚠️  설치 안 된 패키지:"; \
 		echo "$$missing"; \
 		echo ""; \
 		echo "→ make tools 로 설치 필요"; \
+		synced=false; \
 	fi; \
-	if [ -z "$$untracked" ] && ! echo "$$missing" | grep -q "needs to be installed"; then \
+	if [ "$$synced" = "true" ]; then \
 		echo "✅ Brewfile과 시스템이 동기화 상태"; \
 	fi
 
