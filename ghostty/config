@@ -7,20 +7,17 @@
 # --- Typography ---
 font-family = JetBrainsMonoNerdFont
 font-size = 15
-adjust-cell-width = -1
+font-codepoint-map = U+AC00-U+D7AF=D2Coding
+font-codepoint-map = U+1100-U+11FF=D2Coding
+font-codepoint-map = U+3130-U+318F=D2Coding
 
-# --- Window and Appearance ---
-background-opacity = 1.0
+# --- Window ---
 macos-titlebar-style = transparent
 window-padding-x = 10
 window-padding-y = 8
 window-save-state = always
-window-theme = dark
-bold-is-bright = false
-minimum-contrast = 1.1
 
 # --- Cursor ---
-cursor-style-blink = true
 cursor-opacity = 0.8
 
 # --- Keybindings ---
@@ -29,8 +26,6 @@ keybind = alt+right=text:\x1bf
 keybind = alt+backspace=text:\x17
 keybind = alt+delete=text:\x1b[3;3~
 
-# --- Mouse ---
-copy-on-select = clipboard
-
 # --- Clipboard ---
+copy-on-select = clipboard
 clipboard-trim-trailing-spaces = true
