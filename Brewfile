@@ -14,7 +14,7 @@ brew "git-delta"      # git diff replacement
 brew "lazygit"        # git TUI
 
 # --- Dev Tools ---
-brew "asdf"
+brew "mise"
 brew "git"
 brew "gh"
 brew "go"
