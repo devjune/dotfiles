@@ -10,7 +10,8 @@ DOTFILES_DIR := $(shell pwd)
 TERMINAL_TARGETS := \
 	$(HOME)/.config/ghostty/config \
 	$(HOME)/.config/starship.toml \
-	$(HOME)/.zshrc
+	$(HOME)/.zshrc \
+	$(HOME)/.tmux.conf
 
 # Languages
 LANGUAGES := java:temurin-21 nodejs:latest python:latest
@@ -38,7 +39,7 @@ define BACKUP_AND_LINK
 endef
 
 # ===== Main Targets =====
-.PHONY: all install terminal clean help check-system homebrew tools omz languages dump check
+.PHONY: all install terminal clean help check check-system homebrew tools omz languages brew-dump brew-check
 .DEFAULT_GOAL := help
 
 all: check-system install terminal
@@ -52,6 +53,7 @@ terminal:
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/ghostty/config,$(HOME)/.config/ghostty/config)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/starship/starship.toml,$(HOME)/.config/starship.toml)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/zsh/zshrc,$(HOME)/.zshrc)
+	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/tmux/tmux.conf,$(HOME)/.tmux.conf)
 	@touch ~/.hushlogin
 	$(call PRINT_SUCCESS,Terminal configs linked)
 
@@ -74,10 +76,36 @@ help:
 	@echo "  install    - Homebrew + tools + Oh My Zsh"
 	@echo "  terminal   - Link terminal configs (Ghostty, Starship, zshrc)"
 	@echo "  languages  - Install programming languages via asdf"
-	@echo "  check      - Check Brewfile sync status"
-	@echo "  dump       - Update Brewfile from current system"
+	@echo "  check      - Verify symlinks and dependencies"
+	@echo "  brew-check - Check Brewfile sync status"
+	@echo "  brew-dump  - Update Brewfile from current system"
 	@echo "  clean      - Remove all installed components and restore backups"
 	@echo "  help       - Show this help message"
+
+check:
+	$(call PRINT_HEADER,Environment Check)
+	@ok=true; \
+	for f in $(TERMINAL_TARGETS); do \
+		if [ -L "$$f" ]; then \
+			target=$$(readlink "$$f"); \
+			if [ -e "$$target" ]; then \
+				echo "✅ $$f → $$target"; \
+			else \
+				echo "❌ $$f → $$target (broken)"; ok=false; \
+			fi; \
+		elif [ -e "$$f" ]; then \
+			echo "⚠️  $$f (not a symlink)"; ok=false; \
+		else \
+			echo "❌ $$f (missing)"; ok=false; \
+		fi; \
+	done; \
+	if [ -d ~/.oh-my-zsh ]; then echo "✅ oh-my-zsh"; else echo "❌ oh-my-zsh (missing)"; ok=false; fi; \
+	if command -v brew >/dev/null 2>&1; then echo "✅ homebrew"; else echo "❌ homebrew (missing)"; ok=false; fi; \
+	if [ "$$ok" = "true" ]; then \
+		echo ""; echo "✅ All good"; \
+	else \
+		echo ""; echo "⚠️  Issues found. Run 'make all' to fix"; \
+	fi
 
 # ===== Sub Targets =====
 check-system:
@@ -115,7 +143,7 @@ omz:
 	fi
 	$(call PRINT_SUCCESS,Oh My Zsh ready)
 
-check:
+brew-check:
 	$(call PRINT_HEADER,Brew Sync Check)
 	@untracked=$$($(BREW_PATH) bundle cleanup --file=$(DOTFILES_DIR)/Brewfile 2>/dev/null); \
 	missing=$$($(BREW_PATH) bundle check --file=$(DOTFILES_DIR)/Brewfile 2>&1 || true); \
@@ -124,7 +152,7 @@ check:
 		echo "⚠️  Brewfile에 없는 패키지:"; \
 		echo "$$untracked"; \
 		echo ""; \
-		echo "→ make dump 으로 Brewfile 업데이트 필요"; \
+		echo "→ make brew-dump 으로 Brewfile 업데이트 필요"; \
 		synced=false; \
 	fi; \
 	if echo "$$missing" | grep -q "needs to be installed"; then \
@@ -138,7 +166,7 @@ check:
 		echo "✅ Brewfile과 시스템이 동기화 상태"; \
 	fi
 
-dump:
+brew-dump:
 	$(call PRINT_HEADER,Updating Brewfile)
 	@$(BREW_PATH) bundle dump --file=$(DOTFILES_DIR)/Brewfile --force
 	$(call PRINT_SUCCESS,Brewfile updated)
