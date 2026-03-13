@@ -6,7 +6,7 @@ IS_ARM64 := $(shell [ "$$(uname -m)" = "arm64" ] && echo "true")
 BREW_PATH := /opt/homebrew/bin/brew
 DOTFILES_DIR := $(shell pwd)
 
-# Terminal config targets (clean 타겟에서도 참조)
+# Terminal config targets (also referenced in clean target)
 TERMINAL_TARGETS := \
 	$(HOME)/.config/ghostty/config \
 	$(HOME)/.config/starship.toml \
@@ -15,7 +15,7 @@ TERMINAL_TARGETS := \
 	$(HOME)/.gitconfig
 
 # Languages
-LANGUAGES := java:temurin-21 nodejs:latest python:latest
+LANGUAGES := java:temurin-25 nodejs:latest python:latest
 
 # ===== Utility Functions =====
 define PRINT_HEADER
@@ -63,8 +63,8 @@ terminal:
 clean:
 	@echo "🧹 Cleaning up all installed components..."
 	@rm -rf ~/.oh-my-zsh
-	@rm -rf ~/.asdf
-	@rm -f ~/.tool-versions
+	@rm -rf ~/.local/share/mise
+	@rm -rf ~/.config/mise
 	@rm -f ~/.hushlogin
 	@for f in $(TERMINAL_TARGETS); do \
 		if [ -L "$$f" ]; then rm "$$f"; echo "🔗 Removed symlink $$f"; fi; \
@@ -78,7 +78,7 @@ help:
 	@echo "  all        - Install everything"
 	@echo "  install    - Homebrew + tools + Oh My Zsh"
 	@echo "  terminal   - Link terminal configs (Ghostty, Starship, zshrc)"
-	@echo "  languages  - Install programming languages via asdf"
+	@echo "  languages  - Install programming languages via mise"
 	@echo "  check      - Verify symlinks and dependencies"
 	@echo "  brew-check - Check Brewfile sync status"
 	@echo "  brew-dump  - Update Brewfile from current system"
@@ -104,6 +104,7 @@ check:
 	done; \
 	if [ -d ~/.oh-my-zsh ]; then echo "✅ oh-my-zsh"; else echo "❌ oh-my-zsh (missing)"; ok=false; fi; \
 	if command -v brew >/dev/null 2>&1; then echo "✅ homebrew"; else echo "❌ homebrew (missing)"; ok=false; fi; \
+	if command -v mise >/dev/null 2>&1; then echo "✅ mise"; else echo "❌ mise (missing)"; ok=false; fi; \
 	if [ "$$ok" = "true" ]; then \
 		echo ""; echo "✅ All good"; \
 	else \
@@ -152,21 +153,21 @@ brew-check:
 	missing=$$($(BREW_PATH) bundle check --file=$(DOTFILES_DIR)/Brewfile 2>&1 || true); \
 	synced=true; \
 	if [ -n "$$untracked" ]; then \
-		echo "⚠️  Brewfile에 없는 패키지:"; \
+		echo "⚠️  Packages not in Brewfile:"; \
 		echo "$$untracked"; \
 		echo ""; \
-		echo "→ make brew-dump 으로 Brewfile 업데이트 필요"; \
+		echo "→ Run 'make brew-dump' to update Brewfile"; \
 		synced=false; \
 	fi; \
 	if echo "$$missing" | grep -q "needs to be installed"; then \
-		echo "⚠️  설치 안 된 패키지:"; \
+		echo "⚠️  Packages not installed:"; \
 		echo "$$missing"; \
 		echo ""; \
-		echo "→ make tools 로 설치 필요"; \
+		echo "→ Run 'make tools' to install"; \
 		synced=false; \
 	fi; \
 	if [ "$$synced" = "true" ]; then \
-		echo "✅ Brewfile과 시스템이 동기화 상태"; \
+		echo "✅ Brewfile and system are in sync"; \
 	fi
 
 brew-dump:
@@ -176,19 +177,15 @@ brew-dump:
 
 languages:
 	$(call PRINT_HEADER,Installing programming languages)
-	@asdf_path=$$($(BREW_PATH) --prefix asdf)/libexec/asdf.sh; \
-	if [ ! -f "$$asdf_path" ]; then \
-		echo "❌ asdf not installed. Run 'make install' first"; exit 1; \
+	@if ! command -v mise >/dev/null 2>&1; then \
+		echo "❌ mise not installed. Run 'make install' first"; exit 1; \
 	fi; \
-	. "$$asdf_path" && \
 	for lang_ver in $(LANGUAGES); do \
 		lang=$${lang_ver%%:*}; \
 		version=$${lang_ver#*:}; \
-		echo "Adding $$lang plugin..."; \
-		asdf plugin add $$lang 2>/dev/null || true; \
-		asdf install $$lang $$version; \
-		asdf set $$lang $$version; \
+		echo "📦 Installing $$lang@$$version..."; \
+		mise use -g $$lang@$$version; \
 	done && \
 	echo "Installed versions:" && \
-	asdf list
+	mise ls
 	$(call PRINT_SUCCESS,All programming languages installed)

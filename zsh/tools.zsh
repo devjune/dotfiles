@@ -1,3 +1,6 @@
+# mise
+eval "$(mise activate zsh)"
+
 # zoxide
 eval "$(zoxide init zsh)"
 
