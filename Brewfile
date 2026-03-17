@@ -1,34 +1,27 @@
-# --- Shell & Terminal ---
-brew "zsh"
-brew "starship"
-brew "zoxide"         # cd replacement
+brew "bat"
+brew "curl"
+brew "eza"
+brew "fd"
 brew "fzf"
-brew "tmux"
-
-# --- Modern CLI ---
-brew "bat"            # cat replacement
-brew "eza"            # ls replacement
-brew "fd"             # find replacement
-brew "ripgrep"        # grep replacement
-brew "git-delta"      # git diff replacement
-brew "lazygit"        # git TUI
-
-# --- Dev Tools ---
-brew "mise"
-brew "git"
 brew "gh"
+brew "git"
+brew "git-delta"
 brew "go"
 brew "jq"
-
-# --- Utilities ---
-brew "curl"
-brew "wget"
+brew "lazygit"
+brew "mise"
+brew "node"
 brew "pandoc"
 brew "poppler"
+brew "ripgrep"
+brew "starship"
 brew "terminal-notifier"
+brew "tmux"
 brew "tree"
-
-# --- Casks ---
+brew "uv"
+brew "wget"
+brew "zoxide"
+brew "zsh"
 cask "font-d2coding-nerd-font"
 cask "font-jetbrains-mono-nerd-font"
 cask "ghostty"
