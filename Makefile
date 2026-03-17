@@ -62,7 +62,7 @@ terminal:
 	@if [ ! -d $(HOME)/.config/eza/eza-themes ]; then \
 		git clone https://github.com/eza-community/eza-themes.git $(HOME)/.config/eza/eza-themes; \
 	else \
-		echo "eza-themes already cloned"; \
+		echo "⏭️  eza-themes already cloned"; \
 	fi
 	$(call BACKUP_AND_LINK,$(HOME)/.config/eza/eza-themes/themes/$(EZA_THEME).yml,$(HOME)/.config/eza/theme.yml)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/starship/starship.toml,$(HOME)/.config/starship.toml)
@@ -143,7 +143,7 @@ homebrew:
 		/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; \
 		eval "$$($(BREW_PATH) shellenv)"; \
 	else \
-		echo "Homebrew already installed"; \
+		echo "⏭️  Homebrew already installed"; \
 	fi
 	$(call PRINT_SUCCESS,Homebrew ready)
 
@@ -157,39 +157,26 @@ omz:
 	@if [ ! -d ~/.oh-my-zsh ]; then \
 		sh -c "$$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended; \
 	else \
-		echo "Oh My Zsh already installed"; \
+		echo "⏭️  Oh My Zsh already installed"; \
 	fi
 	@for repo in $(ZSH_PLUGINS); do \
 		plugin=$$(basename $$repo); \
 		if [ ! -d ~/.oh-my-zsh/custom/plugins/$$plugin ]; then \
 			git clone $$repo ~/.oh-my-zsh/custom/plugins/$$plugin; \
 		else \
-			echo "$$plugin already installed"; \
+			echo "⏭️  $$plugin already installed"; \
 		fi; \
 	done
 	$(call PRINT_SUCCESS,Oh My Zsh ready)
 
 brew-check:
 	$(call PRINT_HEADER,Brew Sync Check)
-	@untracked=$$($(BREW_PATH) bundle cleanup --file=$(DOTFILES_DIR)/Brewfile 2>/dev/null); \
-	missing=$$($(BREW_PATH) bundle check --file=$(DOTFILES_DIR)/Brewfile 2>&1 || true); \
-	synced=true; \
-	if [ -n "$$untracked" ]; then \
-		echo "⚠️  Packages not in Brewfile:"; \
-		echo "$$untracked"; \
-		echo ""; \
-		echo "→ Run 'make brew-dump' to update Brewfile"; \
-		synced=false; \
-	fi; \
-	if echo "$$missing" | grep -q "needs to be installed"; then \
-		echo "⚠️  Packages not installed:"; \
-		echo "$$missing"; \
-		echo ""; \
-		echo "→ Run 'make tools' to install"; \
-		synced=false; \
-	fi; \
-	if [ "$$synced" = "true" ]; then \
+	@if $(BREW_PATH) bundle check --file=$(DOTFILES_DIR)/Brewfile >/dev/null 2>&1; then \
 		echo "✅ Brewfile and system are in sync"; \
+	else \
+		$(BREW_PATH) bundle check --file=$(DOTFILES_DIR)/Brewfile 2>&1 || true; \
+		echo ""; \
+		echo "→ Run 'make tools' to install missing packages"; \
 	fi
 
 brew-dump:
