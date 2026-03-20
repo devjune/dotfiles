@@ -16,7 +16,7 @@ TERMINAL_TARGETS := \
 	$(HOME)/.gitconfig
 
 # Languages
-LANGUAGES := java:temurin-25 nodejs:latest python:latest
+LANGUAGES := java:temurin-21 nodejs:latest python:latest
 
 # Eza theme
 EZA_THEME := one_dark
@@ -49,7 +49,7 @@ endef
 .PHONY: all install terminal clean help check check-system homebrew tools omz languages brew-dump brew-check
 .DEFAULT_GOAL := help
 
-all: check-system install terminal
+all: check-system install terminal languages
 	$(call PRINT_SUCCESS,Complete development environment ready!)
 
 install: homebrew tools omz
