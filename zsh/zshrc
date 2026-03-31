@@ -9,3 +9,6 @@ DOTFILES_ZSH="$(dirname "$(readlink -f ~/.zshrc)")"
 source "$DOTFILES_ZSH/env.zsh"
 source "$DOTFILES_ZSH/aliases.zsh"
 source "$DOTFILES_ZSH/tools.zsh"
+
+# Machine-specific config (not tracked in git)
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
