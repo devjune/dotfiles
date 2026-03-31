@@ -51,6 +51,10 @@ endef
 
 all: check-system install terminal languages
 	$(call PRINT_SUCCESS,Complete development environment ready!)
+	@echo ""
+	@echo "📋 Post-setup checklist:"
+	@echo "  1. Edit ~/.gitconfig.local with your name and email"
+	@echo "  2. Edit ~/.zshrc.local for machine-specific aliases"
 
 install: homebrew tools omz
 
@@ -70,6 +74,7 @@ terminal:
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/tmux/tmux.conf,$(HOME)/.tmux.conf)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/git/gitconfig,$(HOME)/.gitconfig)
 	@if [ ! -f $(HOME)/.gitconfig.local ]; then cp $(DOTFILES_DIR)/git/gitconfig.local.example $(HOME)/.gitconfig.local; echo "📝 Created ~/.gitconfig.local — edit with your name/email"; fi
+	@if [ ! -f $(HOME)/.zshrc.local ]; then cp $(DOTFILES_DIR)/zsh/zshrc.local.example $(HOME)/.zshrc.local; echo "📝 Created ~/.zshrc.local — add machine-specific aliases"; fi
 	@touch ~/.hushlogin
 	$(call PRINT_SUCCESS,Terminal configs linked)
 
