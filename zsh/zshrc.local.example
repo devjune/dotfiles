@@ -1,0 +1,4 @@
+# Machine-specific aliases and settings
+# Copy to ~/.zshrc.local and customize
+#
+# alias claude-mem='bun "$HOME/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
