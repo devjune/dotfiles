@@ -73,8 +73,10 @@ terminal:
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/zsh/zshrc,$(HOME)/.zshrc)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/tmux/tmux.conf,$(HOME)/.tmux.conf)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/git/gitconfig,$(HOME)/.gitconfig)
-	@if [ ! -f $(HOME)/.gitconfig.local ]; then cp $(DOTFILES_DIR)/git/gitconfig.local.example $(HOME)/.gitconfig.local; echo "📝 Created ~/.gitconfig.local — edit with your name/email"; fi
-	@if [ ! -f $(HOME)/.zshrc.local ]; then cp $(DOTFILES_DIR)/zsh/zshrc.local.example $(HOME)/.zshrc.local; echo "📝 Created ~/.zshrc.local — add machine-specific aliases"; fi
+	@if [ ! -f $(DOTFILES_DIR)/git/gitconfig.local ]; then cp $(DOTFILES_DIR)/git/gitconfig.local.example $(DOTFILES_DIR)/git/gitconfig.local; echo "📝 Created git/gitconfig.local — edit with your name/email"; fi
+	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/git/gitconfig.local,$(HOME)/.gitconfig.local)
+	@if [ ! -f $(DOTFILES_DIR)/zsh/zshrc.local ]; then cp $(DOTFILES_DIR)/zsh/zshrc.local.example $(DOTFILES_DIR)/zsh/zshrc.local; echo "📝 Created zsh/zshrc.local — add machine-specific aliases"; fi
+	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/zsh/zshrc.local,$(HOME)/.zshrc.local)
 	@touch ~/.hushlogin
 	$(call PRINT_SUCCESS,Terminal configs linked)
 
