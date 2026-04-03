@@ -188,7 +188,7 @@ brew-check:
 
 brew-dump:
 	$(call PRINT_HEADER,Updating Brewfile)
-	@$(BREW_PATH) bundle dump --file=$(DOTFILES_DIR)/Brewfile --force
+	@$(BREW_PATH) bundle dump --file=$(DOTFILES_DIR)/Brewfile --force --no-vscode
 	$(call PRINT_SUCCESS,Brewfile updated)
 
 languages:
