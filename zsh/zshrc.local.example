@@ -1,4 +1,7 @@
 # Machine-specific aliases and settings
 # Copy to ~/.zshrc.local and customize
 #
+# 규칙: 이 파일엔 머신/계정 고유 값만 (AWS_PROFILE, 인프라 ID, 개인 경로, secret 등).
+# 모든 머신에 공통으로 적용할 개선은 zsh/*.zsh (추적 파일)에.
+#
 # alias claude-mem='bun "$HOME/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
