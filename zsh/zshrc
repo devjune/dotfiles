@@ -7,6 +7,7 @@ source $ZSH/oh-my-zsh.sh
 # Load modules
 DOTFILES_ZSH="$(dirname "$(readlink -f ~/.zshrc)")"
 source "$DOTFILES_ZSH/env.zsh"
+source "$DOTFILES_ZSH/history.zsh"
 source "$DOTFILES_ZSH/aliases.zsh"
 source "$DOTFILES_ZSH/tools.zsh"
 
