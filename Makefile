@@ -13,7 +13,8 @@ TERMINAL_TARGETS := \
 	$(HOME)/.config/eza/theme.yml \
 	$(HOME)/.zshrc \
 	$(HOME)/.tmux.conf \
-	$(HOME)/.gitconfig
+	$(HOME)/.gitconfig \
+	$(HOME)/.vimrc
 
 # Languages
 LANGUAGES := java:temurin-21 nodejs:latest python:latest
@@ -72,6 +73,7 @@ terminal:
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/starship/starship.toml,$(HOME)/.config/starship.toml)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/zsh/zshrc,$(HOME)/.zshrc)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/tmux/tmux.conf,$(HOME)/.tmux.conf)
+	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/vim/vimrc,$(HOME)/.vimrc)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/git/gitconfig,$(HOME)/.gitconfig)
 	@if [ ! -f $(DOTFILES_DIR)/git/gitconfig.local ]; then cp $(DOTFILES_DIR)/git/gitconfig.local.example $(DOTFILES_DIR)/git/gitconfig.local; echo "📝 Created git/gitconfig.local — edit with your name/email"; fi
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/git/gitconfig.local,$(HOME)/.gitconfig.local)
@@ -98,7 +100,7 @@ help:
 	@echo "Available targets:"
 	@echo "  all        - Install everything"
 	@echo "  install    - Homebrew + tools + Oh My Zsh"
-	@echo "  terminal   - Link terminal configs (Ghostty, Starship, eza, zshrc, tmux, git)"
+	@echo "  terminal   - Link terminal configs (Ghostty, Starship, eza, zshrc, tmux, vim, git)"
 	@echo "  languages  - Install programming languages via mise"
 	@echo "  check      - Verify symlinks and dependencies"
 	@echo "  brew-check - Check Brewfile sync status"

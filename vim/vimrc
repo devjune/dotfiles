@@ -1,0 +1,24 @@
+" --- Display ---
+syntax on
+set number
+set cursorline
+set showmatch
+
+" --- Search ---
+set incsearch hlsearch
+set ignorecase smartcase
+
+" --- Editing ---
+filetype plugin indent on
+set autoindent smartindent
+set expandtab tabstop=4 shiftwidth=4
+set backspace=indent,eol,start
+
+" --- UX ---
+set mouse=a
+set clipboard=unnamed
+set wildmenu
+set splitbelow splitright
+
+" --- No annoyance ---
+set noswapfile nobackup nowritebackup
