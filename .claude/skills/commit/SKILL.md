@@ -1,4 +1,11 @@
-변경 사항을 분석하고 이 프로젝트의 커밋 컨벤션에 맞게 커밋해줘.
+---
+name: commit
+description: Analyze staged/unstaged changes and create commits following this dotfiles repo's convention (English imperative title, optional Korean body, conventional-commit type/scope). Use when the user asks to commit changes, split changes into commits, or apply this project's commit message style.
+---
+
+# Commit
+
+변경 사항을 분석하고 이 프로젝트의 커밋 컨벤션에 맞게 커밋한다.
 
 ## Commit Message Rules
 
@@ -42,5 +49,3 @@ chore: add bat/rg/fd aliases, D2Coding font, clean up configs
 2. Split into single or multiple commits by logical scope
 3. Show draft commit message to user and commit after confirmation
 4. Warn if sensitive files (.env, credentials, etc.) are included
-
-$ARGUMENTS
