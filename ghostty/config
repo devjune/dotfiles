@@ -7,7 +7,7 @@
 # --- Typography ---
 font-family = "D2CodingLigature Nerd Font"
 font-size = 16
-adjust-cell-width = -1
+adjust-cell-width = 0
 theme = 0x96f
 
 # --- Window ---
