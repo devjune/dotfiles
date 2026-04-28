@@ -5,12 +5,9 @@
 # Reload: Cmd+Shift+, (macOS)
 
 # --- Typography ---
-font-family = JetBrainsMonoNerdFont
-font-size = 15
+font-family = "D2CodingLigature Nerd Font"
+font-size = 16
 adjust-cell-width = -1
-font-codepoint-map = U+AC00-U+D7AF=D2Coding
-font-codepoint-map = U+1100-U+11FF=D2Coding
-font-codepoint-map = U+3130-U+318F=D2Coding
 theme = 0x96f
 
 # --- Window ---
