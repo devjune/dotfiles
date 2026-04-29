@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(brew list:*)",
+      "Bash(brew search:*)",
+      "Bash(brew info:*)",
+      "Bash(/usr/libexec/java_home -V)",
+      "Bash(command -v mise)",
+      "Bash(mise ls:*)",
+      "Bash(mise use:*)",
+      "Bash(make brew-dump:*)",
+      "Bash(git checkout:*)",
+      "Bash(git push:*)",
+      "Bash(git config:*)",
+      "Bash(gh pr:*)",
+      "Bash(gh api:*)",
+      "Bash(tmux -V)",
+      "Bash(tmux list-sessions:*)",
+      "Bash(tmux source-file:*)",
+      "Bash(tmux new-window:*)",
+      "Bash(tmux kill-pane:*)",
+      "Bash(tmux split-window:*)",
+      "Bash(tmux display-message:*)",
+      "Bash(tmux list-keys:*)",
+      "Bash(tmux set:*)",
+      "Bash(tmux show-hooks:*)",
+      "Bash(tmux show-options:*)",
+      "Bash(tmux info *)",
+      "Bash(~/.tmux/plugins/tpm/bin/install_plugins)",
+      "Bash(bash ~/.tmux/plugins/tmux-fingers/tmux-fingers.tmux 2>&1)",
+      "Bash(ghostty +show-config)",
+      "Bash(ghostty --version)",
+      "Bash(ghostty +list-themes)",
+      "Bash(starship module *)",
+      "Bash(fzf --version)",
+      "Bash(vim --version)",
+      "Bash(vim -c 'set number? cursorline? mouse? clipboard?' -c 'q')",
+      "Bash(zoxide query *)",
+      "Bash(defaults read:*)"
+    ]
+  }
+}
