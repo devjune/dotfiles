@@ -1,7 +1,35 @@
-When adding or modifying any configuration, always review the full set of config files (ghostty, zsh, tmux, starship, git, etc.) for:
+# 설정 의존성 체크
 
-1. Conflicts — settings in different files that override or negate each other (e.g., shell-integration-features overriding cursor-style)
-2. Dependencies — settings that only work when another setting is also configured
-3. Load order — plugin or tool initialization order that affects behavior (e.g., zsh plugin order)
+## 목적
 
-Flag any issues to the user before applying changes.
+dotfiles의 여러 설정 파일은 서로 영향을 주고받는다. 한 파일에서 옵션을 바꾸면
+다른 파일이 그 동작을 덮어쓰거나 무력화할 수 있으므로, 변경 전후로 관련 설정을
+함께 검토하여 일관성을 유지한다.
+
+## 적용 시점
+
+`ghostty`, `zsh`, `tmux`, `starship`, `git` 등 설정 파일을 **추가하거나 수정하는
+모든 작업**에 적용한다.
+
+## 점검 항목
+
+### 1. 충돌 (Conflicts)
+
+서로 다른 파일의 설정이 같은 동작을 두고 덮어쓰거나 상쇄하지 않는지 확인한다.
+
+- 예: ghostty의 `shell-integration-features`가 `cursor-style` 설정을 덮어쓰는 경우
+
+### 2. 의존성 (Dependencies)
+
+한 설정이 다른 설정이 함께 구성되어 있어야만 동작하는 경우, 그 짝이 빠지지
+않았는지 확인한다.
+
+### 3. 로드 순서 (Load order)
+
+플러그인이나 도구의 초기화 순서가 동작에 영향을 주는지 확인한다.
+
+- 예: zsh 플러그인 로드 순서 (`zsh-syntax-highlighting`은 다른 플러그인보다 뒤에 와야 함)
+
+## 처리 방식
+
+이슈를 발견하면 **변경을 적용하기 전에 사용자에게 보고하고 컨펌을 받는다.**
