@@ -23,7 +23,8 @@ mouse-hide-while-typing = true
 
 # --- Cursor ---
 cursor-style = underline
-cursor-opacity = 0.8
+cursor-style-blink = true
+cursor-opacity = 1.0
 # prevent shell from overriding cursor-style
 shell-integration-features = no-cursor
 
