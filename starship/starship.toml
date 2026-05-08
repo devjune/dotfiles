@@ -3,6 +3,15 @@ add_newline = false
 command_timeout = 500
 scan_timeout = 10
 
+# tmux 와 톤 통일 (색 변경 시 한 곳만 수정)
+palette = "tmux"
+
+[palettes.tmux]
+blue  = "#5294e2"  # tmux status bar
+amber = "#ca8a04"  # tmux mode highlight (PREFIX/COPY)
+red   = "#ef4444"  # tmux sync / error
+green = "#22c55e"  # success
+
 # --- Prompt Format ---
 format = """
 $directory\
@@ -14,15 +23,30 @@ $character"""
 
 # --- Modules ---
 [directory]
+style = "bold blue"
 truncation_length = 3
 truncate_to_repo = true
 
 [git_branch]
 format = "[$branch]($style) "
+style = "bold amber"
 
+# 더티 상태가 한눈에 보이도록 심볼/카운트 명시
 [git_status]
 format = '([$all_status$ahead_behind]($style) )'
+style = "bold red"
+conflicted = "= "
+ahead     = "⇡${count} "
+behind    = "⇣${count} "
+diverged  = "⇕⇡${ahead_count}⇣${behind_count} "
+up_to_date = ""
+untracked = "?${count} "
+stashed   = "$ "
+modified  = "!${count} "
+staged    = "+${count} "
+renamed   = "»${count} "
+deleted   = "✘${count} "
 
 [character]
 success_symbol = "[➜](bold green)"
-error_symbol = "[➜](bold red)"
+error_symbol   = "[➜](bold red)"
