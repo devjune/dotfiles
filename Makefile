@@ -12,8 +12,10 @@ TERMINAL_TARGETS := \
 	$(HOME)/.config/starship.toml \
 	$(HOME)/.config/eza/theme.yml \
 	$(HOME)/.zshrc \
+	$(HOME)/.zshrc.local \
 	$(HOME)/.tmux.conf \
 	$(HOME)/.gitconfig \
+	$(HOME)/.gitconfig.local \
 	$(HOME)/.vimrc
 
 # Languages
@@ -73,6 +75,11 @@ terminal:
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/starship/starship.toml,$(HOME)/.config/starship.toml)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/zsh/zshrc,$(HOME)/.zshrc)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/tmux/tmux.conf,$(HOME)/.tmux.conf)
+	@if [ ! -d ~/.tmux/plugins/tpm ]; then \
+		git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm; \
+	else \
+		echo "⏭️  tpm already installed"; \
+	fi
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/vim/vimrc,$(HOME)/.vimrc)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/git/gitconfig,$(HOME)/.gitconfig)
 	@if [ ! -f $(DOTFILES_DIR)/git/gitconfig.local ]; then cp $(DOTFILES_DIR)/git/gitconfig.local.example $(DOTFILES_DIR)/git/gitconfig.local; echo "📝 Created git/gitconfig.local — edit with your name/email"; fi
