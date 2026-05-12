@@ -12,6 +12,11 @@ alias cat="bat --paging=never"
 alias vim="nvim"
 alias vi="nvim"
 
+# Claude Code 한 줄 질문 — /btw 흉내: 일회성, 도구 없음, 디스크 저장 없음
+# noglob: ?/* 같은 글로브 문자 그대로 통과
+_ask() { claude -p --no-session-persistence --disable-slash-commands --tools "" -- "$*" }
+alias ask='noglob _ask'
+
 # ripgrep / fd
 alias rg="rg --smart-case"
 alias fd="fd --hidden --exclude .git"
