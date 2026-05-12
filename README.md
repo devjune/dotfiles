@@ -7,6 +7,60 @@ macOS (Apple Silicon) development environment setup.
 ```bash
 git clone git@github.com:devjune/dotfiles.git ~/git/dotfiles
 cd ~/git/dotfiles
-make all        # Homebrew + tools + terminal configs
-make languages  # Programming languages (optional)
+make all        # Homebrew + tools + terminal configs + symlinks
+make languages  # Programming languages via mise (optional)
 ```
+
+After setup, fill in machine-specific values:
+
+- `~/.gitconfig.local` — git user name and email
+- `~/.zshrc.local` — machine-specific aliases, env vars, AWS profiles
+
+Both files are auto-created from `.example` versions on first `make terminal` and are gitignored.
+
+## Make targets
+
+| Target | Description |
+|---|---|
+| `make all` | Full setup (system check + install + terminal + languages) |
+| `make install` | Homebrew + Brewfile + Oh My Zsh + plugins |
+| `make terminal` | Symlink configs to `~/` and `~/.config/` |
+| `make languages` | Install Java / Node / Python via mise |
+| `make check` | Verify symlinks and key dependencies |
+| `make clean` | Remove installed components and restore backups |
+| `make brew-check` | Compare Brewfile vs installed brews |
+| `make brew-dump` | Dump current brews into Brewfile |
+| `make help` | List targets |
+
+## Structure
+
+```
+dotfiles/
+├── Brewfile              # Homebrew packages (declarative)
+├── Makefile              # Install / link / check / clean
+├── ghostty/config        # Terminal emulator
+├── git/gitconfig         # Universal git config (includes .local)
+├── git/gitconfig.local   # Identity / LFS (gitignored)
+├── nvim/                 # Neovim (lazy.nvim + minimal modern stack)
+├── starship/starship.toml
+├── tmux/tmux.conf
+├── zsh/                  # Modular zsh: env / aliases / history / tools
+└── zsh/zshrc.local       # Machine-specific aliases / functions (gitignored)
+```
+
+## Tracked vs local
+
+Universal improvements that every machine wants → tracked. Machine-specific values (identity, AWS profiles, infra IDs, secrets) → `.local`. See `.claude/rules/preferences.md` for full rationale.
+
+## Verification
+
+```bash
+make check        # Symlinks + oh-my-zsh + homebrew + mise health
+make brew-check   # Brewfile drift vs installed
+```
+
+## Troubleshooting
+
+- **Symlink missing or broken** → `make terminal` (idempotent, backs up real files)
+- **Brewfile says missing packages** → `make tools`
+- **Nuke and reinstall** → `make clean` then `make all`
