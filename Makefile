@@ -11,12 +11,12 @@ TERMINAL_TARGETS := \
 	$(HOME)/.config/ghostty/config \
 	$(HOME)/.config/starship.toml \
 	$(HOME)/.config/eza/theme.yml \
+	$(HOME)/.config/nvim \
 	$(HOME)/.zshrc \
 	$(HOME)/.zshrc.local \
 	$(HOME)/.tmux.conf \
 	$(HOME)/.gitconfig \
-	$(HOME)/.gitconfig.local \
-	$(HOME)/.vimrc
+	$(HOME)/.gitconfig.local
 
 # Languages
 LANGUAGES := java:temurin-21 nodejs:latest python:latest
@@ -41,7 +41,8 @@ endef
 
 define BACKUP_AND_LINK
 	@if [ -e "$(2)" ] && [ ! -L "$(2)" ]; then \
-		cp "$(2)" "$(2).bak.$$(date +%Y%m%d_%H%M%S)"; \
+		cp -R "$(2)" "$(2).bak.$$(date +%Y%m%d_%H%M%S)"; \
+		rm -rf "$(2)"; \
 		echo "📦 Backed up $(2)"; \
 	fi
 	@ln -sf "$(1)" "$(2)"
@@ -80,7 +81,7 @@ terminal:
 	else \
 		echo "⏭️  tpm already installed"; \
 	fi
-	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/vim/vimrc,$(HOME)/.vimrc)
+	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/nvim,$(HOME)/.config/nvim)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/git/gitconfig,$(HOME)/.gitconfig)
 	@if [ ! -f $(DOTFILES_DIR)/git/gitconfig.local ]; then cp $(DOTFILES_DIR)/git/gitconfig.local.example $(DOTFILES_DIR)/git/gitconfig.local; echo "📝 Created git/gitconfig.local — edit with your name/email"; fi
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/git/gitconfig.local,$(HOME)/.gitconfig.local)

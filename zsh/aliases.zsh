@@ -8,6 +8,10 @@ alias llt="LS_COLORS= eza -l --git --icons --sort=modified --reverse"  # newest 
 # bat (cat replacement)
 alias cat="bat --paging=never"
 
+# neovim
+alias vim="nvim"
+alias vi="nvim"
+
 # ripgrep / fd
 alias rg="rg --smart-case"
 alias fd="fd --hidden --exclude .git"
