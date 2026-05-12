@@ -92,10 +92,13 @@ terminal:
 
 clean:
 	$(call PRINT_HEADER,Cleaning up all installed components)
-	@rm -rf ~/.oh-my-zsh
-	@rm -rf ~/.config/eza
-	@rm -rf ~/.local/share/mise
-	@rm -rf ~/.config/mise
+	@ts=$$(date +%Y%m%d_%H%M%S); \
+	for d in ~/.oh-my-zsh ~/.config/eza ~/.local/share/mise ~/.config/mise; do \
+		if [ -e "$$d" ]; then \
+			mv "$$d" "$$d.bak.$$ts"; \
+			echo "📦 Backed up $$d → $$d.bak.$$ts"; \
+		fi; \
+	done
 	@rm -f ~/.hushlogin
 	@for f in $(TERMINAL_TARGETS); do \
 		if [ -L "$$f" ]; then rm "$$f"; echo "🔗 Removed symlink $$f"; fi; \
@@ -108,7 +111,7 @@ help:
 	@echo "Available targets:"
 	@echo "  all        - Install everything"
 	@echo "  install    - Homebrew + tools + Oh My Zsh"
-	@echo "  terminal   - Link terminal configs (Ghostty, Starship, eza, zshrc, tmux, vim, git)"
+	@echo "  terminal   - Link terminal configs (Ghostty, Starship, eza, zshrc, tmux, nvim, git)"
 	@echo "  languages  - Install programming languages via mise"
 	@echo "  check      - Verify symlinks and dependencies"
 	@echo "  brew-check - Check Brewfile sync status"
