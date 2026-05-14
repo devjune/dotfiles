@@ -4,4 +4,5 @@ export PATH="$HOME/.local/bin:$PATH"
 export EZA_CONFIG_DIR="$HOME/.config/eza"
 export EDITOR=nvim
 export VISUAL=nvim
+export BAT_THEME="Monokai Extended Origin"
 
