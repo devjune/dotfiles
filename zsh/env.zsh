@@ -5,4 +5,5 @@ export EZA_CONFIG_DIR="$HOME/.config/eza"
 export EDITOR=nvim
 export VISUAL=nvim
 export BAT_THEME="Monokai Extended Origin"
+export BAT_STYLE="numbers"
 
