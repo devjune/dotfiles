@@ -4,3 +4,4 @@
 git/gitconfig.local
 zsh/zshrc.local
 .claude/settings.local.json
+nvim/lazy-lock.json
