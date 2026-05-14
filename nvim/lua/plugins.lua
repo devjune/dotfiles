@@ -1,11 +1,12 @@
 return {
   -- Colorscheme
   {
-    "vimcolorschemes/olive-crt.nvim",
+    "loctvl842/monokai-pro.nvim",
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme("olive-crt")
+      require("monokai-pro").setup({ filter = "pro" })
+      vim.cmd.colorscheme("monokai-pro")
     end,
   },
 
