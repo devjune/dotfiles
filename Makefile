@@ -49,6 +49,22 @@ define BACKUP_AND_LINK
 	@echo "🔗 $(2) → $(1)"
 endef
 
+define CLONE_IF_MISSING
+	@if [ ! -d "$(2)" ]; then \
+		git clone "$(1)" "$(2)"; \
+	else \
+		echo "⏭️  $(2) already exists"; \
+	fi
+endef
+
+define ENSURE_LOCAL_LINK
+	@if [ ! -f "$(1)" ]; then \
+		cp "$(1).example" "$(1)"; \
+		echo "📝 Created $(1) — $(3)"; \
+	fi
+	$(call BACKUP_AND_LINK,$(1),$(2))
+endef
+
 # ===== Main Targets =====
 .PHONY: all install terminal clean help check check-system homebrew tools omz languages brew-dump brew-check
 .DEFAULT_GOAL := help
@@ -67,26 +83,16 @@ terminal:
 	@mkdir -p ~/.config/ghostty
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/ghostty/config,$(HOME)/.config/ghostty/config)
 	@mkdir -p $(HOME)/.config/eza
-	@if [ ! -d $(HOME)/.config/eza/eza-themes ]; then \
-		git clone https://github.com/eza-community/eza-themes.git $(HOME)/.config/eza/eza-themes; \
-	else \
-		echo "⏭️  eza-themes already cloned"; \
-	fi
+	$(call CLONE_IF_MISSING,https://github.com/eza-community/eza-themes.git,$(HOME)/.config/eza/eza-themes)
 	$(call BACKUP_AND_LINK,$(HOME)/.config/eza/eza-themes/themes/$(EZA_THEME).yml,$(HOME)/.config/eza/theme.yml)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/starship/starship.toml,$(HOME)/.config/starship.toml)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/zsh/zshrc,$(HOME)/.zshrc)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/tmux/tmux.conf,$(HOME)/.tmux.conf)
-	@if [ ! -d ~/.tmux/plugins/tpm ]; then \
-		git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm; \
-	else \
-		echo "⏭️  tpm already installed"; \
-	fi
+	$(call CLONE_IF_MISSING,https://github.com/tmux-plugins/tpm,$(HOME)/.tmux/plugins/tpm)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/nvim,$(HOME)/.config/nvim)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/git/gitconfig,$(HOME)/.gitconfig)
-	@if [ ! -f $(DOTFILES_DIR)/git/gitconfig.local ]; then cp $(DOTFILES_DIR)/git/gitconfig.local.example $(DOTFILES_DIR)/git/gitconfig.local; echo "📝 Created git/gitconfig.local — edit with your name/email"; fi
-	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/git/gitconfig.local,$(HOME)/.gitconfig.local)
-	@if [ ! -f $(DOTFILES_DIR)/zsh/zshrc.local ]; then cp $(DOTFILES_DIR)/zsh/zshrc.local.example $(DOTFILES_DIR)/zsh/zshrc.local; echo "📝 Created zsh/zshrc.local — add machine-specific aliases"; fi
-	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/zsh/zshrc.local,$(HOME)/.zshrc.local)
+	$(call ENSURE_LOCAL_LINK,$(DOTFILES_DIR)/git/gitconfig.local,$(HOME)/.gitconfig.local,edit with your name/email)
+	$(call ENSURE_LOCAL_LINK,$(DOTFILES_DIR)/zsh/zshrc.local,$(HOME)/.zshrc.local,add machine-specific aliases)
 	@touch ~/.hushlogin
 	$(call PRINT_SUCCESS,Terminal configs linked)
 
@@ -180,11 +186,11 @@ omz:
 		echo "⏭️  Oh My Zsh already installed"; \
 	fi
 	@for repo in $(ZSH_PLUGINS); do \
-		plugin=$$(basename $$repo); \
-		if [ ! -d ~/.oh-my-zsh/custom/plugins/$$plugin ]; then \
-			git clone $$repo ~/.oh-my-zsh/custom/plugins/$$plugin; \
+		dest=~/.oh-my-zsh/custom/plugins/$$(basename $$repo); \
+		if [ ! -d $$dest ]; then \
+			git clone $$repo $$dest; \
 		else \
-			echo "⏭️  $$plugin already installed"; \
+			echo "⏭️  $$dest already exists"; \
 		fi; \
 	done
 	$(call PRINT_SUCCESS,Oh My Zsh ready)
