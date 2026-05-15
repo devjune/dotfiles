@@ -3,6 +3,7 @@
 alias ll="LS_COLORS= eza -l --git --icons"
 alias la="LS_COLORS= eza -la --git --icons"
 alias lt="LS_COLORS= eza --tree --level=2 --icons"
+alias tree="LS_COLORS= eza --tree --icons"
 alias llt="LS_COLORS= eza -l --git --icons --sort=modified --reverse"  # newest last (like ls -lart)
 
 # bat (cat replacement)
