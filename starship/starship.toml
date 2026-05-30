@@ -6,20 +6,24 @@ scan_timeout = 10
 # tmux 와 톤 통일 (색 변경 시 한 곳만 수정)
 palette = "tmux"
 
+# --- Prompt Format ---
+# format 은 모든 [table] 헤더보다 앞 = 최상위 키여야 함.
+# (테이블 아래에 두면 palettes.tmux.format 으로 묻혀서 무시됨)
+format = """
+$directory\
+$git_branch\
+$git_status\
+$java\
+$python\
+$kotlin\
+$nodejs\
+$character"""
+
 [palettes.tmux]
 blue  = "#5294e2"  # tmux status bar
 amber = "#ca8a04"  # tmux mode highlight (PREFIX/COPY)
 red   = "#ef4444"  # tmux sync / error
 green = "#22c55e"  # success
-
-# --- Prompt Format ---
-format = """
-$directory\
-$git_branch\
-$git_status\
-$kotlin\
-$nodejs\
-$character"""
 
 # --- Modules ---
 [directory]
