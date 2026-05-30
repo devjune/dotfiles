@@ -66,7 +66,7 @@ define ENSURE_LOCAL_LINK
 endef
 
 # ===== Main Targets =====
-.PHONY: all install terminal clean help check check-system homebrew tools omz claude languages brew-dump brew-check
+.PHONY: all install terminal clean help check check-system homebrew tools omz claude docker languages brew-dump brew-check
 .DEFAULT_GOAL := help
 
 all: check-system install terminal languages
@@ -76,7 +76,7 @@ all: check-system install terminal languages
 	@echo "  1. Edit ~/.gitconfig.local with your name and email"
 	@echo "  2. Edit ~/.zshrc.local for machine-specific aliases"
 
-install: homebrew tools omz claude
+install: homebrew tools omz claude docker
 
 terminal:
 	$(call PRINT_HEADER,Terminal Configuration)
@@ -205,6 +205,22 @@ claude:
 		echo "⏭️  Claude Code already installed"; \
 	fi
 	$(call PRINT_SUCCESS,Claude Code ready)
+
+# Docker Desktop: official .dmg installer. The Homebrew cask conflicts with the
+# `docker` CLI formula's shell completions and fails setting xattr inside the
+# signed app bundle on this macOS, so install straight from docker.com.
+docker:
+	$(call PRINT_HEADER,Docker Desktop Installation)
+	@if [ ! -d /Applications/Docker.app ]; then \
+		curl -fSL -o /tmp/Docker.dmg "https://desktop.docker.com/mac/main/arm64/Docker.dmg"; \
+		sudo hdiutil attach /tmp/Docker.dmg -nobrowse; \
+		sudo /Volumes/Docker/Docker.app/Contents/MacOS/install --accept-license --user="$$(whoami)"; \
+		sudo hdiutil detach /Volumes/Docker; \
+		rm -f /tmp/Docker.dmg; \
+	else \
+		echo "⏭️  Docker Desktop already installed"; \
+	fi
+	$(call PRINT_SUCCESS,Docker Desktop ready)
 
 brew-check:
 	$(call PRINT_HEADER,Brew Sync Check)

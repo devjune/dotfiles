@@ -23,7 +23,7 @@ Both files are auto-created from `.example` versions on first `make terminal` an
 | Target | Description |
 |---|---|
 | `make all` | Full setup (system check + install + terminal + languages) |
-| `make install` | Homebrew + Brewfile + Oh My Zsh + plugins + Claude Code |
+| `make install` | Homebrew + Brewfile + Oh My Zsh + plugins + Claude Code + Docker Desktop |
 | `make terminal` | Symlink configs to `~/` and `~/.config/` + install tmux plugins |
 | `make languages` | Install Java / Node / Python via mise |
 | `make check` | Verify symlinks and key dependencies |
@@ -57,6 +57,7 @@ Universal improvements that every machine wants → tracked. Machine-specific va
 
 - **`nvim/lazy-lock.json` is tracked** — reproducibility first: a fresh `make all` should resolve identical plugin versions on every machine, not whatever is newest that day. This matters most for `nvim-treesitter`, which rides its volatile `main` branch where a bad commit can break startup. To bump, run `:Lazy update` and commit the lockfile.
 - **Claude Code installs via the official script, not Homebrew** — `make install` runs `curl -fsSL https://claude.ai/install.sh | bash` because the Homebrew cask lags behind the latest releases. The installer self-updates and lives in `~/.local/bin` (kept ahead of `brew` paths in `zsh/env.zsh`).
+- **Docker Desktop installs via the official `.dmg`, not the Homebrew cask** — `make docker` pulls the installer straight from docker.com because the cask conflicts with the `docker` CLI formula's shell completions and fails setting xattr inside the signed app bundle on this macOS. The `docker` CLI formula stays (completions, no conflict with a `.dmg`-installed app).
 - **tmux and starship share one color palette by hand** — `tmux/tmux.conf` (`@c_bg`/`@c_mode`/`@c_sync`) and `starship/starship.toml` (`[palettes.tmux]`) each hard-code the same hex values; there is no shared file. Change a color in one and you must mirror it in the other, or the status bar and prompt drift out of sync.
 - **Session state restoration is intentional** — Ghostty (`window-save-state = always`) and tmux (`@continuum-restore 'on'`, which also autosaves every ~15 min) both bring back the previous layout on launch. If you ever want a clean start, that is the pair to disable.
 
