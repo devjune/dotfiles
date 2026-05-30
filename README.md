@@ -42,7 +42,7 @@ dotfiles/
 ├── ghostty/config        # Terminal emulator
 ├── git/gitconfig         # Universal git config (includes .local)
 ├── git/gitconfig.local   # Identity / LFS (gitignored)
-├── nvim/                 # Neovim (lazy.nvim + minimal modern stack)
+├── nvim/                 # Neovim — lightweight quick editor (no LSP by design)
 ├── starship/starship.toml
 ├── tmux/tmux.conf
 ├── zsh/                  # Modular zsh: env / aliases / history / tools
