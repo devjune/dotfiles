@@ -6,6 +6,10 @@
 [core]
     pager = delta
 
+# --- Init ---
+[init]
+    defaultBranch = main
+
 # --- Delta ---
 [interactive]
     diffFilter = delta --color-only
