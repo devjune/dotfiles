@@ -52,6 +52,10 @@ dotfiles/
 
 Universal improvements that every machine wants → tracked. Machine-specific values (identity, AWS profiles, infra IDs, secrets) → `.local`. See `.claude/rules/preferences.md` for full rationale.
 
+## Design notes
+
+- **`nvim/lazy-lock.json` is tracked** — reproducibility first: a fresh `make all` should resolve identical plugin versions on every machine, not whatever is newest that day. This matters most for `nvim-treesitter`, which rides its volatile `main` branch where a bad commit can break startup. To bump, run `:Lazy update` and commit the lockfile.
+
 ## Verification
 
 ```bash
