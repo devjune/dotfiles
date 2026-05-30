@@ -41,7 +41,7 @@ dotfiles/
 ├── Makefile              # Install / link / check / clean
 ├── ghostty/config        # Terminal emulator
 ├── git/gitconfig         # Universal git config (includes .local)
-├── git/gitconfig.local   # Identity / LFS (gitignored)
+├── git/gitconfig.local   # Identity: name / email (gitignored)
 ├── nvim/                 # Neovim — lightweight quick editor (no LSP by design)
 ├── starship/starship.toml
 ├── tmux/tmux.conf
