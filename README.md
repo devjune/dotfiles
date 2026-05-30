@@ -23,7 +23,7 @@ Both files are auto-created from `.example` versions on first `make terminal` an
 | Target | Description |
 |---|---|
 | `make all` | Full setup (system check + install + terminal + languages) |
-| `make install` | Homebrew + Brewfile + Oh My Zsh + plugins |
+| `make install` | Homebrew + Brewfile + Oh My Zsh + plugins + Claude Code |
 | `make terminal` | Symlink configs to `~/` and `~/.config/` |
 | `make languages` | Install Java / Node / Python via mise |
 | `make check` | Verify symlinks and key dependencies |
@@ -55,6 +55,7 @@ Universal improvements that every machine wants → tracked. Machine-specific va
 ## Design notes
 
 - **`nvim/lazy-lock.json` is tracked** — reproducibility first: a fresh `make all` should resolve identical plugin versions on every machine, not whatever is newest that day. This matters most for `nvim-treesitter`, which rides its volatile `main` branch where a bad commit can break startup. To bump, run `:Lazy update` and commit the lockfile.
+- **Claude Code installs via the official script, not Homebrew** — `make install` runs `curl -fsSL https://claude.ai/install.sh | bash` because the Homebrew cask lags behind the latest releases. The installer self-updates and lives in `~/.local/bin` (kept ahead of `brew` paths in `zsh/env.zsh`).
 
 ## Verification
 

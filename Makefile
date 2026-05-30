@@ -66,7 +66,7 @@ define ENSURE_LOCAL_LINK
 endef
 
 # ===== Main Targets =====
-.PHONY: all install terminal clean help check check-system homebrew tools omz languages brew-dump brew-check
+.PHONY: all install terminal clean help check check-system homebrew tools omz claude languages brew-dump brew-check
 .DEFAULT_GOAL := help
 
 all: check-system install terminal languages
@@ -76,7 +76,7 @@ all: check-system install terminal languages
 	@echo "  1. Edit ~/.gitconfig.local with your name and email"
 	@echo "  2. Edit ~/.zshrc.local for machine-specific aliases"
 
-install: homebrew tools omz
+install: homebrew tools omz claude
 
 terminal:
 	$(call PRINT_HEADER,Terminal Configuration)
@@ -194,6 +194,16 @@ omz:
 		fi; \
 	done
 	$(call PRINT_SUCCESS,Oh My Zsh ready)
+
+# Official installer (self-updating); Homebrew cask lags the latest releases
+claude:
+	$(call PRINT_HEADER,Claude Code Installation)
+	@if [ ! -x ~/.local/bin/claude ]; then \
+		curl -fsSL https://claude.ai/install.sh | bash; \
+	else \
+		echo "⏭️  Claude Code already installed"; \
+	fi
+	$(call PRINT_SUCCESS,Claude Code ready)
 
 brew-check:
 	$(call PRINT_HEADER,Brew Sync Check)
