@@ -24,7 +24,7 @@ Both files are auto-created from `.example` versions on first `make terminal` an
 |---|---|
 | `make all` | Full setup (system check + install + terminal + languages) |
 | `make install` | Homebrew + Brewfile + Oh My Zsh + plugins + Claude Code |
-| `make terminal` | Symlink configs to `~/` and `~/.config/` |
+| `make terminal` | Symlink configs to `~/` and `~/.config/` + install tmux plugins |
 | `make languages` | Install Java / Node / Python via mise |
 | `make check` | Verify symlinks and key dependencies |
 | `make clean` | Remove installed components and restore backups |

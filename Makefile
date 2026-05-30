@@ -89,6 +89,7 @@ terminal:
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/zsh/zshrc,$(HOME)/.zshrc)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/tmux/tmux.conf,$(HOME)/.tmux.conf)
 	$(call CLONE_IF_MISSING,https://github.com/tmux-plugins/tpm,$(HOME)/.tmux/plugins/tpm)
+	@$(HOME)/.tmux/plugins/tpm/bin/install_plugins
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/nvim,$(HOME)/.config/nvim)
 	$(call BACKUP_AND_LINK,$(DOTFILES_DIR)/git/gitconfig,$(HOME)/.gitconfig)
 	$(call ENSURE_LOCAL_LINK,$(DOTFILES_DIR)/git/gitconfig.local,$(HOME)/.gitconfig.local,edit with your name/email)
