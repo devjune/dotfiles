@@ -1,6 +1,6 @@
 # Dotfiles
 
-macOS (Apple Silicon) development environment setup.
+macOS (Apple Silicon) development environment — minimal, modern, and built to be worked on alongside an AI agent.
 
 ## Setup
 
@@ -36,6 +36,7 @@ Both files are auto-created from `.example` versions on first `make terminal` an
 
 ```
 dotfiles/
+├── .claude/              # AI-agent rules, skills, permissions
 ├── Brewfile              # Homebrew packages (declarative)
 ├── Makefile              # Install / link / check / clean
 ├── ghostty/config        # Terminal emulator
@@ -56,6 +57,8 @@ Universal improvements that every machine wants → tracked. Machine-specific va
 
 - **`nvim/lazy-lock.json` is tracked** — reproducibility first: a fresh `make all` should resolve identical plugin versions on every machine, not whatever is newest that day. This matters most for `nvim-treesitter`, which rides its volatile `main` branch where a bad commit can break startup. To bump, run `:Lazy update` and commit the lockfile.
 - **Claude Code installs via the official script, not Homebrew** — `make install` runs `curl -fsSL https://claude.ai/install.sh | bash` because the Homebrew cask lags behind the latest releases. The installer self-updates and lives in `~/.local/bin` (kept ahead of `brew` paths in `zsh/env.zsh`).
+- **tmux and starship share one color palette by hand** — `tmux/tmux.conf` (`@c_bg`/`@c_mode`/`@c_sync`) and `starship/starship.toml` (`[palettes.tmux]`) each hard-code the same hex values; there is no shared file. Change a color in one and you must mirror it in the other, or the status bar and prompt drift out of sync.
+- **Session state restoration is intentional** — Ghostty (`window-save-state = always`) and tmux (`@continuum-restore 'on'`, which also autosaves every ~15 min) both bring back the previous layout on launch. If you ever want a clean start, that is the pair to disable.
 
 ## Verification
 
