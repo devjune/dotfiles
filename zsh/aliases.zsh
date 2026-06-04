@@ -7,7 +7,7 @@ alias tree="LS_COLORS= eza --tree --icons"
 alias llt="LS_COLORS= eza -l --git --icons --sort=modified --reverse"  # newest last (like ls -lart)
 
 # bat (cat replacement)
-alias cat="bat --paging=never"
+alias cat="bat --paging=never --style=plain"
 
 # neovim
 alias vim="nvim"
