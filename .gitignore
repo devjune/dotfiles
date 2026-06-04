@@ -1,5 +1,6 @@
 .idea
 .cursor
+.DS_Store
 .mise.toml
 git/gitconfig.local
 zsh/zshrc.local
