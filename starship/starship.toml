@@ -54,3 +54,15 @@ deleted   = "✘${count} "
 [character]
 success_symbol = "[➜](bold green)"
 error_symbol   = "[➜](bold red)"
+
+# --- Claude Code statusline ---
+# settings.json 의 statusLine 을 "starship statusline claude-code" 로 두면 렌더됨.
+# directory/git_branch/git_status 는 위 프롬프트 모듈 설정을 그대로 재사용 → 셸 프롬프트와 색 일치.
+[profiles]
+claude-code = "$directory$git_branch$git_status$claude_model$claude_context"
+
+[claude_model]
+format = "[|](dimmed) [$model](purple) "
+
+[claude_context]
+format = "[|](dimmed) ctx:[$percentage](cyan) "
